@@ -11,11 +11,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/category")
-public class CategoryController implements BaseController<Category> {
+public class CategoryController {
 
     @Autowired
     private CategoryRepository categoryRepository;
-
 
     @GetMapping
     public List<Category> list() {
@@ -30,7 +29,7 @@ public class CategoryController implements BaseController<Category> {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Category create(@PathVariable final Category category) {
+    public Category create(@RequestBody final Category category) {
         return categoryRepository.saveAndFlush(category);
     }
 
