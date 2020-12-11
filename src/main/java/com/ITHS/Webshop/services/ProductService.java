@@ -1,21 +1,16 @@
 package com.ITHS.Webshop.services;
 
-import com.ITHS.Webshop.repositories.CategoryRepository;
-import com.ITHS.Webshop.repositories.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.ITHS.Webshop.models.Product;
 
-import javax.transaction.Transactional;
+import java.util.List;
 
-@Service
-@Transactional
-public class ProductService {
+public interface ProductService {
 
-    @Autowired
-    ProductRepository productRepository;
-
-    @Autowired
-    CategoryRepository categoryRepository;
-
+    public List<Product> getAllProducts();
+    public  Product getById(int id);
+    public Product getByName(String name);
+    public List<Product> getProductsByCategory(int categoryId);
+    public  Product create(Product product);
+    public  Product update(Product product);
 
 }

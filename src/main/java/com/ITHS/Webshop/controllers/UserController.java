@@ -1,8 +1,10 @@
 
 package com.ITHS.Webshop.controllers;
 
+import com.ITHS.Webshop.models.Order;
 import com.ITHS.Webshop.models.User;
 import com.ITHS.Webshop.repositories.UserRepository;
+import com.ITHS.Webshop.services.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,43 +18,39 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @GetMapping
     public List<User> list() {
-        return userRepository.findAll();
+        return userService.getAllUsers();
     }
 
     @GetMapping
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public User get(@PathVariable int id) {
-        return userRepository.getOne(id);
+        return userService.getById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@RequestBody final User user) {
 
-        return userRepository.saveAndFlush(user);
+        return userService.create(user);
     }
 
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     public User update(@PathVariable int id, @RequestBody User user) {
-        //TODO: Add validation that all attributes are passed in, otherwise return a 400 bad payload
-        User existingUser = userRepository.getOne(id);
-        BeanUtils.copyProperties(user, existingUser, "id");
-        return userRepository.saveAndFlush(existingUser);
+      return userService.update(id, user);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public User login (@RequestBody User user) throws Exception{
-    User loginUser = userRepository.findByUsernameIgnoreCase(user.getUsername());
-    if (loginUser.getPassword().equals(user.getPassword())){
-        return loginUser;
+    public User login (@RequestBody User user) {
+      return   userService.login(user);
     }
-        throw new Exception("Login Failed: Please enter valid username and password");
-    }
+
+
+
 
 }
 

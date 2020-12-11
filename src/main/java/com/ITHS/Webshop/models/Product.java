@@ -1,8 +1,6 @@
 package com.ITHS.Webshop.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,7 +15,7 @@ import java.util.Set;
 @Table(name = "products")
 public class Product implements Serializable {
 
-    @Id ()
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
@@ -43,7 +41,16 @@ public class Product implements Serializable {
     @JoinTable(name = "product_category",
             joinColumns = {@JoinColumn(name = "product_id")},
             inverseJoinColumns = {@JoinColumn(name = "category_id")})
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
+    @JsonIgnoreProperties("products")
     private Set<Category> categories = new HashSet<>();
+
+//    @OneToOne(mappedBy = "product")
+//    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+//    @JsonIdentityReference(alwaysAsId = true)
+//    @PrimaryKeyJoinColumn
+//    private OrderItem orderItem;
 
     public Integer getId() {
         return id;
@@ -100,4 +107,5 @@ public class Product implements Serializable {
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
+
 }

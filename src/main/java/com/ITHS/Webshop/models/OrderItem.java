@@ -1,13 +1,18 @@
 package com.ITHS.Webshop.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "order_items")
-@Data
 public class OrderItem {
 
     @Id
@@ -15,19 +20,75 @@ public class OrderItem {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "order_id", nullable = false)
-    private Integer orderId;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
+    private Order order;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "created_at", nullable = false)
-    private Timestamp createdAt = new Timestamp(System.currentTimeMillis());
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private Timestamp createdAt;
 
-    @Column(name = "updated_at", nullable = false)
-    private Timestamp updatedAt = new Timestamp(System.currentTimeMillis());
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Timestamp updatedAt;
 
-    @Column(name = "products_id", nullable = false)
-    private Integer productsId;
+    @OneToOne
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product products) {
+        this.product = products;
+    }
 
 }
